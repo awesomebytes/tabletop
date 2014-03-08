@@ -186,6 +186,7 @@ struct ObjectRecognizer : public object_recognition_core::db::bases::ModelReader
 
       min_z_[document.get_field<std::string>("object_id")] = min_z;
 
+      std::cout << "After the minimum z check, Adding object with model_id: " << document.get_field<std::string>("object_id") << std::endl;
       object_recognizer_.addObject(i, mesh_msg);
 
       std::cout << std::endl;
@@ -248,6 +249,7 @@ struct ObjectRecognizer : public object_recognition_core::db::bases::ModelReader
         continue;
       }
 
+      std::cout << "Adding object with model_id: " << model_id << std::endl;
       object_recognizer_.addObject(model_id, mesh);
       std::stringstream ss;
       ss << model_id;
@@ -281,8 +283,8 @@ struct ObjectRecognizer : public object_recognition_core::db::bases::ModelReader
       tabletop_object_ids_.set_callback(boost::bind(&ObjectRecognizer::parameterCallbackModelSet, this, _1));
       tabletop_object_ids_.dirty(true);
 
-      perform_fit_merge_ = true;
-      confidence_cutoff_ = 0.85f;
+      perform_fit_merge_ = true; // was true
+      confidence_cutoff_ = 0.85f; // was 0.85f
     }
 
     /** Compute the pose of the table plane
@@ -327,12 +329,14 @@ struct ObjectRecognizer : public object_recognition_core::db::bases::ModelReader
       pose_results_->clear();
       for (size_t i = 0; i < results.size(); ++i)
       {
+        std::cout << "result " << i+1 << " / " << results.size() << std::endl;
         const tabletop_object_detector::TabletopObjectRecognizer::TabletopResult & result = results[i];
         const size_t table_index = cluster_table[result.cloud_index_];
 
         PoseResult pose_result;
 
         // Add the object id
+        std::cout << "result.object_id_: " << result.object_id_ << std::endl; //THIS ID IS ALWAYS 0
         std::string object_id = household_id_to_db_id_[result.object_id_];
         pose_result.set_object_id(db_, object_id);
 

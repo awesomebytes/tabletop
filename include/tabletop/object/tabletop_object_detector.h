@@ -107,9 +107,10 @@ class TabletopObjectRecognizer
       std::vector<std::vector<ModelFitInfo> > raw_fit_results(clusters.size());
       std::vector<cv::flann::Index> search(clusters.size());
       cluster_model_indices.resize(clusters.size(), -1);
-      int num_models = 1;
+      int num_models = 1; // this maybe does something... changed to 4 and saw no difference
       for (size_t i = 0; i < clusters.size(); i++)
       {
+        std::cout << "fitBestModels: " << i+1 << " / " << clusters.size() << std::endl;
         cluster_model_indices[i] = i;
         cv::Mat features = cv::Mat(clusters[i]).reshape(1);
         search[i].build(features, cv::flann::KDTreeIndexParams());
@@ -170,7 +171,8 @@ class TabletopObjectRecognizer
       // Merge clusters together
       for (size_t i = 0; i < cluster_model_indices.size(); i++)
       {
-        if ((cluster_model_indices[i] != int(i)) || (raw_fit_results[i].empty()))
+        std::cout << "Analyzing # " << i+1 << " / " << cluster_model_indices.size() << " has id: " << raw_fit_results[i][0].getModelId()<< " and a confidence of " << raw_fit_results[i][0].getScore() << std::endl;
+        if ((cluster_model_indices[i] != int(i)) || (raw_fit_results[i].empty())) //WTF is this check? XD
           continue;
 
         double confidence = getConfidence (raw_fit_results[i][0].getScore());
@@ -180,6 +182,7 @@ class TabletopObjectRecognizer
 
         TabletopResult result;
         result.object_id_ = raw_fit_results[i][0].getModelId();
+        std::cout << "# " << i+1 << " / " << cluster_model_indices.size() << " has id: " << result.object_id_ << " and a confidence of " << confidence << std::endl;
         result.pose_ = raw_fit_results[i][0].getPose();
         result.confidence_ = confidence;
         result.cloud_ = clusters[i];

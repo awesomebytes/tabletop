@@ -96,8 +96,8 @@ namespace tabletop
 
       outputs.declare(&TableDetector::table_coefficients_, "table_coefficients", "The coefficients of planar surfaces.");
       outputs.declare(&TableDetector::table_mask_, "table_mask", "The mask of planar surfaces.");
-      outputs.declare(&TableDetector::clouds_hull_, "clouds_hull", "Hulls of the samples.");
-      outputs.declare(&TableDetector::pose_results_, "pose_results", "The results of object recognition");
+      outputs.declare(&TableDetector::clouds_hull_, "clouds_hull", "Hulls of the planes.");
+      outputs.declare(&TableDetector::pose_results_, "pose_results", "The results of plane detection.");
     }
 
 
