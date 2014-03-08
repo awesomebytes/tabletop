@@ -103,6 +103,7 @@ struct ObjectRecognizer : public object_recognition_core::db::bases::ModelReader
     aiLogStream* ai_stream_ = new aiLogStream(aiGetPredefinedLogStream(aiDefaultLogStream_STDOUT, NULL));
     aiAttachLogStream(ai_stream_);
 
+    int to_be_template_model_id = 0;
     BOOST_FOREACH(const object_recognition_core::db::Document & document, db_documents) {
       // Get the list of _attachments and figure out the original mesh
       std::vector<std::string> attachments_names = document.attachment_names();
@@ -186,13 +187,14 @@ struct ObjectRecognizer : public object_recognition_core::db::bases::ModelReader
 
       min_z_[document.get_field<std::string>("object_id")] = min_z;
 
-      std::cout << "After the minimum z check, Adding object with model_id: " << document.get_field<std::string>("object_id") << std::endl;
+      std::cout << "After the minimum z check, Adding object with model_id: " << to_be_template_model_id << std::endl;
       /* THE PROBLEM IS HERE I THINK! ALWAYS ADDING THIS i = 0 so all models have ID 0... so we use first one only*/
-      object_recognizer_.addObject(i, mesh_msg);
+      object_recognizer_.addObject(to_be_template_model_id, mesh_msg);
 
       std::cout << std::endl;
 
       aiReleaseImport(scene);
+     to_be_template_model_id++;
     }
 
     aiDetachAllLogStreams();
