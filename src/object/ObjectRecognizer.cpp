@@ -129,12 +129,10 @@ struct ObjectRecognizer : public object_recognition_core::db::bases::ModelReader
         }
       }
 
-      // Create a fake ID
-      static int i = 0;
-      household_id_to_db_id_[i] = document.get_field<std::string>("object_id");
+      household_id_to_db_id_[to_be_template_model_id] = document.get_field<std::string>("object_id");
 
       // Load the mesh through assimp
-      std::cout << "Loading model: " << document.id() << " for object id: " << household_id_to_db_id_[i];
+      std::cout << "Loading model: " << document.id() << " for object id: " << household_id_to_db_id_[to_be_template_model_id];
 
       const struct aiScene* scene = aiImportFile(mesh_path.c_str(), aiProcess_FindDegenerates |
       aiProcess_FindInvalidData |
@@ -339,7 +337,7 @@ struct ObjectRecognizer : public object_recognition_core::db::bases::ModelReader
         PoseResult pose_result;
 
         // Add the object id
-        std::cout << "result.object_id_: " << result.object_id_ << std::endl; //THIS ID IS ALWAYS 0
+        std::cout << "result.object_id_: " << result.object_id_ << std::endl; //THIS ID was always 0
         std::string object_id = household_id_to_db_id_[result.object_id_];
         pose_result.set_object_id(db_, object_id);
 

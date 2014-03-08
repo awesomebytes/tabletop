@@ -128,8 +128,8 @@ class ExhaustiveFitDetector
     for (size_t i=0; i<templates.size(); ++i) 
     {
       std::cout << "in fitBestModels, fitting template " << i+1 << " / " << templates.size() << std::endl;
-      ModelFitInfo current = templates[i]->fitPointCloud(cloud, search, min_object_score); // this returns model_id 0 always
-//ModelFitInfo current = ModelFitInfo((int) 0, fitresult.getPose(), fitresult.getScore()); // so im setting model_id that fits the template (putting i), 0 to test if it needs 0, because rviz crashes and the 'key' field of the recognized_object_array is empty with i
+      ModelFitInfo current = templates[i]->fitPointCloud(cloud, search, min_object_score); // this returns model_id 0 alway.... If I fix that everything fucks up, key field not added
+      //ModelFitInfo current = ModelFitInfo((int) 1, fitresult.getPose(), fitresult.getScore()); // so im setting model_id that fits the template (putting i), 0 to test if it needs 0, because rviz crashes and the 'key' field of the recognized_object_array is empty with i
       // MODEL ID HERE IS ALWAYS 0!!! fitPointCloud doesnt set model_id_!!
       std::cout << "Current id: " << current.getModelId() << std::endl;
       // If the model that was matched is not in the exclusion list
