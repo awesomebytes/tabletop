@@ -187,6 +187,7 @@ struct ObjectRecognizer : public object_recognition_core::db::bases::ModelReader
       min_z_[document.get_field<std::string>("object_id")] = min_z;
 
       std::cout << "After the minimum z check, Adding object with model_id: " << document.get_field<std::string>("object_id") << std::endl;
+      /* THE PROBLEM IS HERE I THINK! ALWAYS ADDING THIS i = 0 so all models have ID 0... so we use first one only*/
       object_recognizer_.addObject(i, mesh_msg);
 
       std::cout << std::endl;
